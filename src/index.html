@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta content='width=device-width,initial-scale=1,viewport-fit=cover' name='viewport'/>
+<title>Nexora AI Digital</title>
+<meta name="description" content="Explore AI. Decode Technology. Create What's Next. Tutorials on AI, project management, Six Sigma, data analytics and digital marketing."/>
+<link rel="alternate" type="application/rss+xml" title="Nexora AI Digital" href="/feed.xml"/>
+<link href='https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&amp;family=Inter:wght@400;500;600&amp;display=swap' rel='stylesheet'/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#0f0c16;color:#efe6dc;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+a{color:inherit}
+svg{display:block}
+
+:root{
+  --amber:#f6b55c;--amber2:#e58a3a;--ink:#efe6dc;--mute:#a99fb0;
+  --card:rgba(16,12,24,.62);--line:rgba(255,255,255,.09);
+  /* how high above the player bar the puppy shelf + dog house sit (raise it to lift everything) */
+  --pet-bottom:70px;
+}
+
+.app{position:relative;z-index:2;height:100vh;height:100dvh;display:flex;flex-direction:column;background:radial-gradient(120% 90% at 30% 0%,#1d1530 0,#0f0c16 60%)}
+
+/* header */
+.top{height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 16px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#2a1a0c;
+  background:linear-gradient(135deg,var(--amber),var(--amber2));font-family:'Fraunces',Georgia,serif}
+.brand-text b{display:block;font-family:'Fraunces',Georgia,serif;font-size:15px;line-height:1.1;white-space:nowrap}
+.brand-text small{font-size:9px;letter-spacing:.22em;color:var(--mute)}
+.top-actions{display:flex;gap:8px}
+.pill{padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);font-size:12.5px;white-space:nowrap;transition:.2s}
+.pill:hover{background:rgba(255,255,255,.1)}
+.pill[aria-pressed="true"]{background:rgba(246,181,92,.18);border-color:rgba(246,181,92,.55);color:#ffd9a3}
+
+/* layout: scene LEFT, library RIGHT */
+.stage{flex:1;min-height:0;display:grid;gap:14px;padding:0 14px;
+  grid-template-columns:minmax(250px,290px) minmax(0,1fr) minmax(320px,400px);
+  transition:grid-template-columns .5s ease}
+.foot{height:26px;flex:none;display:grid;place-items:center;font-size:9.5px;letter-spacing:.22em;color:#7d7388}
+
+.panel{min-height:0;display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:20px;overflow:hidden;
+  background:var(--card);border:1px solid var(--line);backdrop-filter:blur(14px) saturate(1.25);-webkit-backdrop-filter:blur(14px) saturate(1.25);
+  transition:opacity .45s,transform .45s}
+.eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber)}
+.panel h2{font-family:'Fraunces',Georgia,serif;font-size:21px;font-weight:600;line-height:1.1}
+.sub{font-size:12.5px;color:var(--mute);margin-top:-4px}
+
+/* ===== scene (left) ===== */
+.room{position:relative;min-height:0;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#0b0810}
+.bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+#bgvids{position:absolute;inset:0}
+.bgv{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 50%;opacity:0;transition:opacity 1.3s ease,filter 1.3s ease;background:#0b0810}
+.room[data-fit="fill"] .bgv{object-fit:cover}
+.bgv.on{opacity:1}
+.scrim{position:absolute;inset:0;display:block;background:linear-gradient(180deg,rgba(8,5,14,.55) 0,rgba(8,5,14,0) 28%,rgba(8,5,14,0) 62%,rgba(8,5,14,.6) 100%)}
+.vig{position:absolute;inset:0;display:block;pointer-events:none;background:radial-gradient(125% 100% at 50% 52%,transparent 65%,rgba(4,2,8,.45) 100%)}
+
+.hero{position:absolute;z-index:3;top:12px;left:16px;max-width:52%;pointer-events:none;transition:opacity .5s}
+.hero h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(18px,2.2vw,28px);font-weight:600;margin:3px 0;text-shadow:0 2px 18px rgba(0,0,0,.8),0 0 2px rgba(0,0,0,.5)}
+.hero p{font-size:12.5px;color:#d9cfe0;text-shadow:0 1px 10px rgba(0,0,0,.85)}
+.relax{position:absolute;z-index:3;left:50%;bottom:10px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.rb{display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;font-size:12.5px;background:rgba(15,12,22,.6);border:1px solid var(--line);backdrop-filter:blur(8px);transition:.2s;white-space:nowrap}
+.rb svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rb b{font-weight:600;color:var(--amber)}
+.rb:hover{background:rgba(255,255,255,.14)}
+.rb[aria-pressed="true"]{background:rgba(246,181,92,.2);border-color:rgba(246,181,92,.55)}
+
+/* scene controls (header) */
+.scenebar{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-width:0}
+.grp{display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.sb{display:flex;align-items:center;justify-content:center;gap:5px;height:30px;min-width:32px;padding:0 8px;border-radius:999px;font-size:12px;color:#e7dccf;border:1px solid transparent;transition:.2s;white-space:nowrap}
+.sb .e{font-size:15px;line-height:1}
+.sb .lbl{display:none}
+.sb:hover{background:rgba(255,255,255,.12)}
+.sb[aria-pressed="true"]{background:rgba(246,181,92,.22);border-color:rgba(246,181,92,.6);color:#ffd9a3}
+#dnBtn .e-night,#dnBtn .lbl-night{display:none}
+.app[data-base="night"] #dnBtn .e-day,.app[data-base="night"] #dnBtn .lbl-day{display:none}
+.app[data-base="night"] #dnBtn .e-night{display:inline}
+@media (min-width:1620px){
+  .sb .lbl{display:inline}
+  #dnBtn .lbl-night{display:none}
+  .app[data-base="night"] #dnBtn .lbl-night{display:inline}
+}
+@media (max-width:1180px){.brand-text{display:none}.pill{padding:6px 10px}}
+.lead{display:flex;flex-direction:column;line-height:1.15;padding-right:2px;white-space:nowrap}
+.lead b{font-family:'Fraunces',Georgia,serif;font-size:14px;font-weight:600;color:#ffd9a3}
+.lead small{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.cap{display:none;align-self:center;padding:0 4px 0 8px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+@media (min-width:1540px){.cap{display:inline}}
+@media (max-width:1320px){.lead small{display:none}}
+
+/* ===== puppy shelf, house on a pillow, ball ===== */
+.pet{position:absolute;left:0;right:0;bottom:var(--pet-bottom);height:130px;z-index:2;pointer-events:none}
+.shelfline{position:absolute;left:10px;right:10px;bottom:-7px;height:8px;border-radius:3px;background:linear-gradient(180deg,#8a5a36,#5c3a20);box-shadow:0 6px 10px rgba(0,0,0,.45)}
+.pillow{position:absolute;right:0;bottom:-2px;width:150px;height:30px;filter:drop-shadow(0 4px 5px rgba(0,0,0,.5))}
+.dhouse{position:absolute;right:12px;bottom:18px;width:124px;height:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
+.zzz{position:absolute;right:56px;bottom:122px;display:flex;gap:3px;align-items:flex-end;opacity:0;transition:opacity .5s;font:600 14px 'Fraunces',Georgia,serif;color:#cfe0ff;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.zzz.on{opacity:1}
+.zzz i{font-style:normal;animation:zfloat 2.6s ease-in-out infinite}
+.zzz i:nth-child(2){animation-delay:.5s;font-size:17px}.zzz i:nth-child(3){animation-delay:1s;font-size:21px}
+@keyframes zfloat{0%{transform:translateY(8px);opacity:0}30%{opacity:1}100%{transform:translateY(-14px);opacity:0}}
+.ball{position:absolute;left:0;bottom:2px;width:30px;height:30px;will-change:transform}
+.bspin{width:100%;height:100%;filter:drop-shadow(0 3px 3px rgba(0,0,0,.5))}
+.bspin svg{display:block;width:100%;height:100%}
+.ball.roll{animation:bbounce .42s ease-in-out infinite}
+@keyframes bbounce{0%,100%{margin-bottom:0}50%{margin-bottom:9px}}
+
+.dog{position:absolute;left:0;bottom:0;width:72px;will-change:transform;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.dog.hide{pointer-events:none}
+.dshadow{position:absolute;left:12%;right:12%;bottom:-3px;height:9px;border-radius:50%;background:rgba(0,0,0,.5);filter:blur(3px)}
+.pop{transform-origin:50% 100%;transition:opacity .35s ease,transform .45s cubic-bezier(.3,1.5,.5,1)}
+.dog.hide .pop{opacity:0;transform:scale(.3) translateY(10px)}
+.flip{transform:scaleX(var(--d,1));transform-origin:50% 50%}
+.dogimg{display:block;width:100%;height:auto;transform-origin:50% 100%;filter:drop-shadow(0 3px 4px rgba(0,0,0,.45));user-select:none;-webkit-user-drag:none}
+.dog.run .dogimg{animation:trot .3s ease-in-out infinite}
+@keyframes trot{0%,100%{transform:translateY(0) rotate(-6deg) scale(1.06,.93)}25%{transform:translateY(-11px) rotate(0) scale(.96,1.06)}50%{transform:translateY(0) rotate(6deg) scale(1.06,.93)}75%{transform:translateY(-11px) rotate(0) scale(.96,1.06)}}
+.dog.sit .dogimg{animation:breathe 1.6s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.025,1.045)}}
+.dog.kick .dogimg{animation:lunge .28s ease-out 1}
+@keyframes lunge{0%{transform:translateX(0) rotate(0)}45%{transform:translateX(10px) rotate(8deg) scale(1.05,.95)}100%{transform:translateX(0) rotate(0)}}
+.bubble{position:absolute;left:50%;bottom:100%;margin-bottom:2px;transform:translate(-50%,6px) scale(.8);opacity:0;white-space:nowrap;padding:3px 9px;border-radius:12px;background:#fff;color:#1f3a8a;font:700 12px/1.2 'Inter',system-ui,sans-serif;box-shadow:0 3px 10px rgba(0,0,0,.4);transition:.25s;pointer-events:none}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-4px;width:8px;height:8px;background:#fff;transform:translateX(-50%) rotate(45deg)}
+.bubble.on{opacity:1;transform:translate(-50%,0) scale(1)}
+@media (prefers-reduced-motion:reduce){.dog.run .dogimg,.dog.sit .dogimg,.ball.roll,.zzz i{animation:none}}
+
+/* ===== audio-only music strip (left) ===== */
+.music{align-self:start;padding:12px;gap:10px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.link{font-size:12px;color:var(--amber);text-decoration:none;white-space:nowrap}
+.link:hover{text-decoration:underline}
+.track{min-width:0}
+.track h3{font-size:14px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.track p{font-size:11px;color:var(--mute);margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.controls{padding:10px 10px 9px;border-radius:14px;display:flex;flex-direction:column;gap:7px;
+  background:linear-gradient(180deg,rgba(246,181,92,.10),rgba(246,181,92,.03));
+  border:1px solid rgba(246,181,92,.4);box-shadow:0 0 0 3px rgba(246,181,92,.06),0 8px 24px rgba(0,0,0,.3)}
+.upl{padding:9px 12px;border-radius:999px;font-size:12.5px;font-weight:600;color:#2a1a0c;background:linear-gradient(135deg,var(--amber),var(--amber2));white-space:nowrap;width:100%}
+.upl:hover{filter:brightness(1.08)}
+.seekrow{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--mute);font-variant-numeric:tabular-nums}
+.seekrow span{min-width:32px}
+.seekrow span:last-child{text-align:right}
+.prow3{display:flex;flex-direction:column;align-items:center;gap:6px}
+.btnrow{display:flex;align-items:center;justify-content:center;gap:4px}
+.volrow{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mute);width:100%}
+.volrow span{min-width:32px;text-align:right}
+.ib{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;transition:.2s;color:#e7dccf}
+.ib svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ib svg .fill{fill:currentColor}
+.ib:hover{background:rgba(255,255,255,.1)}
+.ib[aria-pressed="true"]{color:var(--amber);background:rgba(246,181,92,.15)}
+.ib.play{width:44px;height:44px;color:#2a1a0c;background:linear-gradient(135deg,var(--amber),var(--amber2));box-shadow:0 6px 18px rgba(229,138,58,.4)}
+.ib.play:hover{filter:brightness(1.08);transform:scale(1.04)}
+.ib.play svg{width:20px;height:20px}
+.ib.sm{width:28px;height:28px}.ib.sm svg{width:16px;height:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:5px;border-radius:5px;outline:none;cursor:pointer;
+  background:linear-gradient(90deg,var(--amber) var(--p,0%),rgba(255,255,255,.16) var(--p,0%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#fff3de;border:2px solid var(--amber2)}
+input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:#fff3de;border:2px solid var(--amber2)}
+.ytbox{position:fixed;left:0;bottom:0;width:220px;height:220px;opacity:.01;pointer-events:none;z-index:-1;overflow:hidden}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(5,3,10,.7);backdrop-filter:blur(4px)}
+.modal.on{display:grid}
+.mbox{width:min(520px,92vw);max-height:88vh;overflow:auto;padding:20px;border-radius:20px;background:#17111f;border:1px solid rgba(246,181,92,.4);display:flex;flex-direction:column;gap:10px}
+.mbox h2{font-family:'Fraunces',Georgia,serif;font-size:21px;font-weight:600}
+.mbox p{font-size:12.5px;color:var(--mute);line-height:1.5}
+.mbox textarea{width:100%;min-height:110px;resize:vertical;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);outline:0;font-size:13px}
+.mbox textarea:focus{border-color:rgba(246,181,92,.6)}
+.mbox input[type=file]{font-size:12px;color:var(--mute)}
+.mrow{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.merr{font-size:12px;color:#ff9c8a;min-height:16px}
+
+/* bookshelf (right) */
+.search{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.search:focus-within{border-color:rgba(246,181,92,.6)}
+.search svg{width:16px;height:16px;flex:none;fill:none;stroke:var(--mute);stroke-width:2;stroke-linecap:round}
+.search input{flex:1;min-width:0;background:none;border:0;outline:0;font-size:13px}
+.search input::placeholder{color:#8a8093}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:5px 10px;border-radius:999px;font-size:11.5px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#d8cfdf;transition:.2s}
+.chip i{font-style:normal;opacity:.6;margin-left:4px}
+.chip:hover{background:rgba(255,255,255,.1)}
+.chip.on{background:rgba(246,181,92,.2);border-color:rgba(246,181,92,.6);color:#ffd9a3}
+.shelf{flex:1;min-height:90px;overflow-y:auto;overflow-x:hidden;padding:2px 2px 6px;scrollbar-width:thin;scrollbar-color:#4b3f56 transparent}
+.shelf::-webkit-scrollbar{width:6px}.shelf::-webkit-scrollbar-thumb{background:#4b3f56;border-radius:6px}
+.row{display:flex;align-items:flex-end;gap:5px;height:158px;padding:0 6px;border-bottom:9px solid #6b4528;
+  background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.25));box-shadow:0 6px 8px -6px rgba(0,0,0,.7);margin-bottom:8px;border-radius:2px 2px 0 0}
+.spine{position:relative;flex:none;display:flex;align-items:center;justify-content:center;border-radius:3px 3px 1px 1px;overflow:hidden;
+  box-shadow:inset 3px 0 0 rgba(255,255,255,.18),inset -3px 0 0 rgba(0,0,0,.28);transition:transform .2s;transform-origin:50% 100%;animation:pop .5s backwards}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}}
+.spine:hover{transform:translateY(-8px)}
+.spine.sel{transform:translateY(-12px);outline:2px solid var(--amber);outline-offset:1px}
+.spine span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;font-weight:600;color:rgba(255,255,255,.92);
+  max-height:88%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.spine::before,.spine::after{content:"";position:absolute;left:0;right:0;height:3px;background:rgba(255,255,255,.35)}
+.spine::before{top:9px}.spine::after{bottom:9px}
+.empty{font-size:12.5px;color:var(--mute);padding:14px 4px}
+.detail{flex:none;display:flex;gap:10px;align-items:stretch;padding:10px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--line);min-height:84px}
+.detail:empty{display:none}
+.detail .cover{width:54px;border-radius:6px;flex:none;background:#3a3046 center/cover no-repeat}
+.detail .meta{min-width:0;display:flex;flex-direction:column;gap:3px}
+.detail h4{font-size:13px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.detail small{font-size:10.5px;color:var(--amber)}
+.detail p{font-size:11px;color:var(--mute);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.detail a{margin-top:auto;font-size:12px;color:var(--amber);text-decoration:none;font-weight:600}
+.detail a:hover{text-decoration:underline}
+
+/* focus mode */
+.app.focus .stage{grid-template-columns:0 minmax(0,1fr) 0;gap:0}
+.app.focus .panel{opacity:0;pointer-events:none;padding:0;border-width:0}
+.app.focus .hero{opacity:0}
+
+.tabs{display:none}
+
+/* small screens: one panel at a time */
+@media (max-width:900px){
+  .stage{grid-template-columns:1fr;grid-template-rows:1fr;padding:0 10px}
+  .stage>*{grid-area:1/1;opacity:0;pointer-events:none;transition:opacity .3s}
+  .app[data-view="music"] .music,.app[data-view="room"] .room,.app[data-view="books"] .books{opacity:1;pointer-events:auto;z-index:3}
+  .app.focus .stage{grid-template-columns:1fr}
+  .tabs{display:flex;gap:6px;justify-content:center;padding:8px 10px 4px}
+  .tabs button{flex:1;max-width:130px;padding:8px;border-radius:999px;font-size:12.5px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+  .tabs button.on{background:rgba(246,181,92,.2);border-color:rgba(246,181,92,.55);color:#ffd9a3}
+  .brand-text small,#findBtn{display:none}
+  .top{height:auto;flex-wrap:wrap;padding:6px 10px;row-gap:6px}
+  .scenebar{order:3;flex:0 0 100%;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .scenebar::-webkit-scrollbar{display:none}
+  .grp{flex:none}
+  .top-actions{margin-left:auto}
+  .top-actions .pill{padding:6px 10px;font-size:12px}
+  .hero p{display:none}
+  .hero{max-width:60%}
+  :root{--pet-bottom:64px}
+}
+@media (max-height:700px) and (min-width:901px){
+  .hero p{display:none}
+  .panel{padding:12px;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){.bgv{transition:none}}
+
+</style>
+</head>
+<body>
+
+<div class="app" id="app" data-view="room" data-base="day">
+
+  <header class="top">
+    <div class="brand">
+      <span class="logo">N</span>
+      <div class="brand-text"><b>Nexora AI Digital</b><small>DIGITAL LIBRARY</small></div>
+    </div>
+
+    <div class="scenebar" id="scenebar" aria-label="Scene controls">
+      <div class="lead"><b>Toggle your day</b><small>sky &#183; season &#183; weather</small></div>
+      <div class="grp" aria-label="Time of day"><span class="cap">Sky</span>
+        <button type="button" class="sb" id="sunriseBtn" aria-pressed="false" title="Sunrise on/off" aria-label="Sunrise on or off"><span class="e">&#127749;</span><span class="lbl">Sunrise</span></button>
+        <button type="button" class="sb" id="dnBtn" aria-pressed="false" title="Day / Night mode" aria-label="Toggle day and night mode">
+          <span class="e e-day">&#9728;&#65039;</span><span class="e e-night">&#127769;</span><span class="lbl lbl-day">Day</span><span class="lbl lbl-night">Night</span>
+        </button>
+        <button type="button" class="sb" id="sunsetBtn" aria-pressed="false" title="Sunset on/off" aria-label="Sunset on or off"><span class="e">&#127751;</span><span class="lbl">Sunset</span></button>
+      </div>
+      <div class="grp" aria-label="Seasons"><span class="cap">Season</span>
+        <button type="button" class="sb" data-season="spring" aria-pressed="false" title="Spring"><span class="e">&#127800;</span><span class="lbl">Spring</span></button>
+        <button type="button" class="sb" data-season="summer" aria-pressed="false" title="Summer"><span class="e">&#127803;</span><span class="lbl">Summer</span></button>
+        <button type="button" class="sb" data-season="autumn" aria-pressed="false" title="Autumn"><span class="e">&#127810;</span><span class="lbl">Autumn</span></button>
+        <button type="button" class="sb" data-season="winter" aria-pressed="false" title="Winter"><span class="e">&#10052;&#65039;</span><span class="lbl">Winter</span></button>
+        <button type="button" class="sb" id="autoBtn" aria-pressed="false" title="Cycle all four seasons automatically on/off"><span class="e">&#128260;</span><span class="lbl">Auto</span></button>
+      </div>
+      <div class="grp"><span class="cap">Weather</span>
+        <button type="button" class="sb" id="sceneRainBtn" aria-pressed="true" title="Rain on/off" aria-label="Rain on or off"><span class="e">&#127783;&#65039;</span><span class="lbl">Rain</span></button>
+      </div>
+      <div class="grp"><span class="cap">Pup</span>
+        <button type="button" class="sb" id="dogBtn" aria-pressed="false" title="Let the puppy out to play with his ball / send him home" aria-label="Puppy out to play or home to the dog house"><span class="e">&#128054;</span><span class="lbl">Play</span></button>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <a class="pill" href="/posts/" style="text-decoration:none">All posts</a>
+      <button type="button" class="pill" id="findBtn">Find a Book</button>
+      <button type="button" class="pill" id="rainBtnTop" aria-pressed="false">Rain Sound: <span class="rain-state">Off</span></button>
+      <button type="button" class="pill" id="focusBtnTop" aria-pressed="false">Focus Mode</button>
+    </div>
+  </header>
+
+  <main class="stage">
+
+    <!-- LEFT STRIP: audio-only YouTube player -->
+    <aside class="panel music" id="musicPanel">
+      <div class="panel-head">
+        <div class="eyebrow">Rainy-day listening room</div>
+        <a class="link" id="plLink" href="https://youtube.com/playlist?list=PLXVucLF00d7p2BlUb8jdcyx1KkEj5awqy" target="_blank" rel="noopener">Playlist &#8599;</a>
+      </div>
+      <div class="track">
+        <h3 id="trackTitle">Your playlist is loading&#8230;</h3>
+        <p id="trackSub">Audio only &#183; Ready when you are</p>
+      </div>
+      <div class="controls" id="musicControls" aria-label="Music controls">
+        <div class="seekrow">
+          <span id="tCur">0:00</span>
+          <input type="range" id="seek" min="0" max="100" step="1" value="0" aria-label="Seek"/>
+          <span id="tDur">0:00</span>
+        </div>
+        <div class="prow3">
+          <div class="btnrow">
+            <button type="button" class="ib" id="shuffleBtn" aria-label="Shuffle" aria-pressed="false">
+              <svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+            </button>
+            <button type="button" class="ib" id="prevBtn" aria-label="Previous track">
+              <svg viewBox="0 0 24 24"><polygon points="19 20 9 12 19 4 19 20" class="fill"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+            </button>
+            <button type="button" class="ib play" id="playBtn" aria-label="Play">
+              <svg viewBox="0 0 24 24" id="icoPlay"><polygon points="7 3 20 12 7 21 7 3" class="fill"/></svg>
+              <svg viewBox="0 0 24 24" id="icoPause" style="display:none"><rect x="6" y="4" width="4" height="16" class="fill"/><rect x="14" y="4" width="4" height="16" class="fill"/></svg>
+            </button>
+            <button type="button" class="ib" id="nextBtn" aria-label="Next track">
+              <svg viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4" class="fill"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+            </button>
+            <button type="button" class="ib" id="repeatBtn" aria-label="Repeat playlist" aria-pressed="false">
+              <svg viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+            </button>
+          </div>
+          <div class="volrow">
+            <button type="button" class="ib sm" id="muteBtn" aria-label="Mute">
+              <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+            </button>
+            <input type="range" id="vol" min="0" max="100" step="1" value="70" aria-label="Volume"/>
+            <span id="volTxt">70%</span>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="upl" id="uploadBtn">&#9835; Upload your playlist</button>
+    </aside>
+
+    <!-- CENTER: scene -->
+    <section class="room" id="room" data-fit="fit">
+      <div class="bg" id="bg" aria-hidden="true"><div id="bgvids"></div><i class="scrim"></i><i class="vig"></i></div>
+
+      <div class="hero">
+        <div class="eyebrow">Your cozy rainy room</div>
+        <h1>Slow down. Stay awhile.</h1>
+        <p>Rain on the window, misty mountains outside, and a warm coffee beside you.</p>
+      </div>
+
+      <div class="relax" id="relax">
+        <button type="button" class="rb" id="fitBtn" aria-label="Toggle full view or fill" title="Full view / Fill the frame"><span>View <b id="fitState">Full</b></span></button>
+        <button type="button" class="rb" id="rainBtn" aria-label="Toggle rain ambience" aria-pressed="false">
+          <svg viewBox="0 0 24 24"><path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9M8 19v2M8 13v2M16 19v2M16 13v2M12 21v2M12 15v2"/></svg>
+          <span>Rain <b class="rain-state">Off</b></span>
+        </button>
+        <button type="button" class="rb" id="focusBtn" aria-label="Toggle focus mode" aria-pressed="false">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/></svg>
+          <span>Focus <b id="focusState">Off</b></span>
+        </button>
+      </div>
+
+      <div class="pet" id="pet">
+        <i class="shelfline"></i>
+
+        <svg class="pillow" viewBox="0 0 150 30" aria-hidden="true">
+          <defs><linearGradient id="plw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b86e6"/><stop offset="1" stop-color="#2c4fa8"/></linearGradient></defs>
+          <path d="M6 20 Q4 8 18 6 Q75 -2 132 6 Q146 8 144 20 Q146 28 132 28 Q75 32 18 28 Q4 28 6 20 Z" fill="url(#plw)"/>
+          <path d="M18 8 Q75 1 132 8" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="75" cy="15" r="2.4" fill="#ffd9a3"/>
+          <g fill="#ffd9a3"><circle cx="4" cy="26" r="3"/><circle cx="146" cy="26" r="3"/></g>
+        </svg>
+
+        <svg class="dhouse" id="dogHouse" viewBox="0 0 130 112" role="img" aria-label="Dog house">
+          <defs>
+            <linearGradient id="dhWood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8895a"/><stop offset=".5" stop-color="#d9a76e"/><stop offset="1" stop-color="#a9784a"/></linearGradient>
+            <linearGradient id="dhRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a7fe0"/><stop offset="1" stop-color="#244a9e"/></linearGradient>
+            <radialGradient id="dhDoor" cx=".5" cy=".9" r=".9"><stop offset="0" stop-color="#4a3220"/><stop offset="1" stop-color="#100804"/></radialGradient>
+          </defs>
+          <path d="M14 106 V55 L65 16 L116 55 V106 Z" fill="url(#dhWood)"/>
+          <g stroke="#8a5c36" stroke-opacity=".55" stroke-width="1.2"><line x1="31" y1="44" x2="31" y2="106"/><line x1="48" y1="30" x2="48" y2="58"/><line x1="82" y1="30" x2="82" y2="58"/><line x1="99" y1="44" x2="99" y2="106"/></g>
+          <g transform="translate(65 38) scale(.62)" fill="#fff" opacity=".95"><ellipse cx="0" cy="6" rx="9" ry="7.5"/><ellipse cx="-11" cy="-6" rx="4" ry="5.4"/><ellipse cx="-4" cy="-13" rx="4" ry="5.4"/><ellipse cx="4.5" cy="-13" rx="4" ry="5.4"/><ellipse cx="11.5" cy="-6" rx="4" ry="5.4"/></g>
+          <path d="M45 106 V79 Q45 58 65 58 Q85 58 85 79 V106 Z" fill="url(#dhDoor)" stroke="#7a5230" stroke-width="3.5"/>
+          <ellipse cx="65" cy="103" rx="17" ry="4" fill="#2f5fb8"/><circle cx="60" cy="102.5" r="1.3" fill="#fff" opacity=".8"/><circle cx="68" cy="103.5" r="1.3" fill="#fff" opacity=".8"/>
+          <path d="M6 60 L65 9 L124 60" fill="none" stroke="url(#dhRoof)" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="M10 56 L65 8.5 L120 56" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+          <rect x="8" y="104" width="114" height="5" rx="1.5" fill="#7a5230"/>
+        </svg>
+        <div class="zzz" id="zzz" aria-hidden="true"><i>z</i><i>z</i><i>Z</i></div>
+
+        <div class="ball" id="ball" aria-hidden="true">
+          <div class="bspin" id="bspin">
+            <svg viewBox="0 0 32 32"><defs><radialGradient id="bg1" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#6b9bff"/><stop offset=".6" stop-color="#2f5fd0"/><stop offset="1" stop-color="#1a3a8c"/></radialGradient></defs>
+              <circle cx="16" cy="16" r="15" fill="url(#bg1)"/>
+              <path d="M3.5 9 Q16 17 4 26 M28.5 9 Q16 17 28 26" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".92"/>
+              <g transform="translate(16 17) scale(.42)" fill="#fff"><ellipse cx="0" cy="6" rx="9" ry="7.5"/><ellipse cx="-11" cy="-6" rx="4" ry="5.4"/><ellipse cx="-4" cy="-13" rx="4" ry="5.4"/><ellipse cx="4.5" cy="-13" rx="4" ry="5.4"/><ellipse cx="11.5" cy="-6" rx="4" ry="5.4"/></g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- puppy: your uploaded image, animated -->
+        <div class="dog hide" id="dog">
+          <div class="bubble" id="dogBubble">Woof!</div>
+          <i class="dshadow"></i>
+          <div class="pop" id="dogPop"><div class="flip" id="dogFlip">
+            <img class="dogimg" id="dogImg" alt="Golden puppy with a blue paw-print bandana" width="72" height="101" draggable="false" src="/assets/dog.webp"/>
+          </div></div>
+        </div>
+      </div>
+
+      </section>
+
+    <!-- RIGHT: library -->
+    <aside class="panel books" id="bookPanel">
+      <div class="eyebrow">Nexora reading nook</div>
+      <h2>Interactive Bookshelf</h2>
+      <p class="sub">Search and explore ideas, one book at a time</p>
+      <label class="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="q" placeholder="Search the shelves" autocomplete="off"/>
+      </label>
+      <div class="chips" id="chips"></div>
+      <div class="shelf" id="shelf"><p class="empty">Loading the library&#8230;</p></div>
+      <div class="detail" id="detail"></div>
+    </aside>
+
+  </main>
+
+  <nav class="tabs" aria-label="Sections">
+    <button type="button" data-view="music">Music</button>
+    <button type="button" data-view="room" class="on">Room</button>
+    <button type="button" data-view="books">Books</button>
+  </nav>
+
+  <footer class="foot">MADE FOR SLOW MOMENTS &#183; POWERED BY CURIOSITY</footer>
+</div>
+
+<!-- hidden audio engines -->
+<div class="ytbox" aria-hidden="true"><div id="ytplayer"></div></div>
+
+<!-- upload / change playlist -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Upload your playlist">
+  <div class="mbox">
+    <h2>Your own playlist</h2>
+    <p>Paste a <b>YouTube playlist or video link</b> (plays as audio only), or paste direct <b>MP3 links</b> (one per line). You can also pick MP3 files from your device.</p>
+    <textarea id="srcText" placeholder="https://youtube.com/playlist?list=...&#10;or&#10;https://example.com/song1.mp3&#10;https://example.com/song2.mp3"></textarea>
+    <input type="file" id="srcFile" accept="audio/*" multiple="multiple"/>
+    <p style="font-size:11.5px">Pasted links are remembered on this device. Files picked from your device play for this visit only.</p>
+    <div class="merr" id="merr"></div>
+    <div class="mrow">
+      <button type="button" class="pill" id="mReset">Back to default</button>
+      <button type="button" class="pill" id="mCancel">Cancel</button>
+      <button type="button" class="upl" id="mLoad">Load playlist</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@main/';
+(function () {
+  'use strict';
+
+  var PLAYLIST = 'PLXVucLF00d7p2BlUb8jdcyx1KkEj5awqy';
+  function $(id) { return document.getElementById(id); }
+  var app = $('app');
+
+  /* ---------- Rain sound (generated) ---------- */
+  var rainOn = false, actx = null, rainGain = null;
+  function initAudio() {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) { return false; }
+    actx = new AC();
+    var len = actx.sampleRate * 3;
+    var buf = actx.createBuffer(1, len, actx.sampleRate);
+    var data = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) { data[i] = Math.random() * 2 - 1; }
+    var src = actx.createBufferSource();
+    src.buffer = buf; src.loop = true;
+    var hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 900;
+    var lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 7000;
+    var hissGain = actx.createGain(); hissGain.gain.value = 0.55;
+    var rl = actx.createBiquadFilter(); rl.type = 'lowpass'; rl.frequency.value = 450;
+    var rumbleGain = actx.createGain(); rumbleGain.gain.value = 0.7;
+    rainGain = actx.createGain(); rainGain.gain.value = 0;
+    src.connect(hp); hp.connect(lp); lp.connect(hissGain); hissGain.connect(rainGain);
+    src.connect(rl); rl.connect(rumbleGain); rumbleGain.connect(rainGain);
+    rainGain.connect(actx.destination);
+    src.start();
+    return true;
+  }
+  function setRain(on) {
+    if (on && !actx && !initAudio()) { return; }
+    rainOn = on;
+    if (actx) {
+      if (on && actx.resume) { actx.resume(); }
+      var t = actx.currentTime;
+      rainGain.gain.cancelScheduledValues(t);
+      rainGain.gain.setTargetAtTime(on ? 0.32 : 0, t, 0.35);
+    }
+    var states = document.querySelectorAll('.rain-state');
+    for (var i = 0; i < states.length; i++) { states[i].textContent = on ? 'On' : 'Off'; }
+    $('rainBtn').setAttribute('aria-pressed', on);
+    $('rainBtnTop').setAttribute('aria-pressed', on);
+  }
+  $('rainBtn').onclick = $('rainBtnTop').onclick = function () { setRain(!rainOn); };
+
+  /* ---------- Focus mode ---------- */
+  function setFocus(on) {
+    app.classList.toggle('focus', on);
+    $('focusBtn').setAttribute('aria-pressed', on);
+    $('focusBtnTop').setAttribute('aria-pressed', on);
+    $('focusState').textContent = on ? 'On' : 'Off';
+    if (on) { app.setAttribute('data-view', 'room'); syncTabs(); }
+  }
+  $('focusBtn').onclick = $('focusBtnTop').onclick = function () { setFocus(!app.classList.contains('focus')); };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if ($('modal').classList.contains('on')) { $('modal').classList.remove('on'); }
+      else if (app.classList.contains('focus')) { setFocus(false); }
+    }
+  });
+
+  /* ---------- Full view / Fill toggle for the scene video ---------- */
+  $('fitBtn').onclick = function () {
+    var room = $('room'), fill = room.getAttribute('data-fit') !== 'fill';
+    room.setAttribute('data-fit', fill ? 'fill' : 'fit');
+    $('fitState').textContent = fill ? 'Fill' : 'Full';
+  };
+
+  /* ---------- Mobile tabs ---------- */
+  var tabBtns = document.querySelectorAll('.tabs button');
+  function syncTabs() {
+    var v = app.getAttribute('data-view');
+    for (var i = 0; i < tabBtns.length; i++) {
+      tabBtns[i].className = tabBtns[i].getAttribute('data-view') === v ? 'on' : '';
+    }
+  }
+  for (var t = 0; t < tabBtns.length; t++) {
+    tabBtns[t].onclick = function () {
+      if (app.classList.contains('focus')) { setFocus(false); }
+      app.setAttribute('data-view', this.getAttribute('data-view')); syncTabs();
+    };
+  }
+  $('findBtn').onclick = function () {
+    if (app.classList.contains('focus')) { setFocus(false); }
+    app.setAttribute('data-view', 'books'); syncTabs();
+    $('q').focus();
+  };
+
+  /* ---------- Audio-only music player: YouTube (hidden) or MP3 files/links ---------- */
+  var mode = null;                      // 'yt' | 'mp3'
+  var yt = null, ytReady = false, ytQueue = [], ytApiLoading = false;
+  var au = document.createElement('audio'); au.preload = 'auto';
+  var queue = [], qi = 0, shuffleOn = false, loopOn = false, muted = false, seeking = false, plainFiles = false;
+  var STORE = 'nexoraPlaylistV1';
+
+  function fmt(s) {
+    s = Math.max(0, Math.floor(s || 0));
+    var m = Math.floor(s / 60), r = s % 60;
+    return m + ':' + (r < 10 ? '0' : '') + r;
+  }
+  function fill(input) {
+    var max = +input.max || 100;
+    input.style.setProperty('--p', (100 * (+input.value) / max) + '%');
+  }
+  function setPlayIcon(playing) {
+    $('icoPlay').style.display = playing ? 'none' : 'block';
+    $('icoPause').style.display = playing ? 'block' : 'none';
+    $('playBtn').setAttribute('aria-label', playing ? 'Pause' : 'Play');
+  }
+  function curVol() { return +$('vol').value; }
+
+  function parseYT(str) {
+    var s = (str || '').trim(), m;
+    if (!s) { return null; }
+    m = /[?&]list=([\w-]+)/.exec(s);
+    if (m) { return { kind: 'list', id: m[1] }; }
+    m = /(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/.exec(s);
+    if (m) { return { kind: 'video', id: m[1] }; }
+    if (/^(PL|UU|OL|FL|RD)[\w-]{10,}$/.test(s)) { return { kind: 'list', id: s }; }
+    if (/^[\w-]{11}$/.test(s)) { return { kind: 'video', id: s }; }
+    return null;
+  }
+  function nameFromUrl(u) {
+    try {
+      var p = decodeURIComponent(u.split('?')[0].split('#')[0]).split('/').pop();
+      return (p || u).replace(/\.[a-z0-9]{2,4}$/i, '').replace(/[_-]+/g, ' ');
+    } catch (e) { return u; }
+  }
+
+  /* --- YouTube engine (hidden player, we only use its sound) --- */
+  function ytCreate(src) {
+    var pv = { controls: 0, rel: 0, playsinline: 1, fs: 0, disablekb: 1, iv_load_policy: 3 };
+    if (src.kind === 'list') { pv.listType = 'playlist'; pv.list = src.id; }
+    yt = new YT.Player('ytplayer', {
+      width: '220', height: '220',
+      videoId: src.kind === 'video' ? src.id : undefined,
+      playerVars: pv,
+      events: {
+        onReady: function () {
+          ytReady = true;
+          yt.setVolume(curVol());
+          if (shuffleOn && yt.setShuffle) { yt.setShuffle(true); }
+          if (loopOn && yt.setLoop) { yt.setLoop(true); }
+          updateMeta();
+        },
+        onStateChange: function (e) {
+          if (mode !== 'yt') { return; }
+          setPlayIcon(e.data === 1);
+          if (e.data === 1 || e.data === 5 || e.data === 3) { updateMeta(); }
+          if (e.data === 0 && loopOn && src.kind === 'video') { yt.playVideo(); }
+        },
+        onError: function () {
+          $('trackTitle').textContent = 'This link could not play here';
+          $('trackSub').textContent = 'Try another link, or upload MP3 files';
+        }
+      }
+    });
+  }
+  function ytLoad(src) {
+    function go() {
+      if (!yt) { ytCreate(src); return; }
+      if (src.kind === 'list') { yt.cuePlaylist({ list: src.id, listType: 'playlist' }); }
+      else { yt.cueVideoById(src.id); }
+    }
+    if (window.YT && YT.Player) { go(); return; }
+    ytQueue.push(go);
+    if (ytApiLoading) { return; }
+    ytApiLoading = true;
+    window.onYouTubeIframeAPIReady = function () { var q = ytQueue; ytQueue = []; q.forEach(function (f) { f(); }); };
+    var s = document.createElement('script');
+    s.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(s);
+  }
+
+  /* --- MP3 engine --- */
+  function mp3Load(i, autoplay) {
+    if (!queue.length) { return; }
+    qi = (i + queue.length) % queue.length;
+    au.src = queue[qi].url;
+    au.volume = curVol() / 100;
+    updateMeta();
+    if (autoplay) { var p = au.play(); if (p && p.catch) { p.catch(function () {}); } }
+  }
+  au.addEventListener('play', function () { if (mode === 'mp3') { setPlayIcon(true); } });
+  au.addEventListener('pause', function () { if (mode === 'mp3') { setPlayIcon(false); } });
+  au.addEventListener('error', function () {
+    if (mode !== 'mp3') { return; }
+    $('trackTitle').textContent = 'Could not play this file';
+    $('trackSub').textContent = 'Check the MP3 link (it must be a direct, public link)';
+  });
+  au.addEventListener('ended', function () {
+    if (mode !== 'mp3') { return; }
+    if (shuffleOn && queue.length > 1) {
+      var n; do { n = Math.floor(Math.random() * queue.length); } while (n === qi);
+      mp3Load(n, true);
+    } else if (qi < queue.length - 1) { mp3Load(qi + 1, true); }
+    else if (loopOn) { mp3Load(0, true); }
+    else { setPlayIcon(false); }
+  });
+
+  function updateMeta() {
+    try {
+      if (mode === 'mp3' && queue.length) {
+        $('trackTitle').textContent = queue[qi].name;
+        $('trackSub').textContent = 'Audio only \u00b7 Track ' + (qi + 1) + ' of ' + queue.length + (plainFiles ? ' \u00b7 your files' : ' \u00b7 your MP3 links');
+      } else if (mode === 'yt' && ytReady) {
+        var vd = yt.getVideoData ? yt.getVideoData() : null;
+        if (vd && vd.title) { $('trackTitle').textContent = vd.title; }
+        var list = yt.getPlaylist ? yt.getPlaylist() : null;
+        var idx = yt.getPlaylistIndex ? yt.getPlaylistIndex() : -1;
+        var sub = 'Audio only';
+        if (list && list.length && idx >= 0) { sub += ' \u00b7 Track ' + (idx + 1) + ' of ' + list.length; }
+        if (vd && vd.author) { sub += ' \u00b7 ' + vd.author; }
+        $('trackSub').textContent = sub;
+      }
+    } catch (e) { /* ignore */ }
+  }
+  function tick() {
+    if (seeking) { return; }
+    var dur = 0, cur = 0;
+    try {
+      if (mode === 'mp3') { dur = au.duration || 0; cur = au.currentTime || 0; }
+      else if (mode === 'yt' && ytReady) { dur = yt.getDuration() || 0; cur = yt.getCurrentTime() || 0; }
+    } catch (e) { return; }
+    var seek = $('seek');
+    seek.max = Math.max(1, Math.floor(dur));
+    seek.value = Math.floor(cur);
+    fill(seek);
+    $('tCur').textContent = fmt(cur);
+    $('tDur').textContent = fmt(dur);
+  }
+  setInterval(tick, 500);
+
+  /* --- choose / switch source --- */
+  function stopAll() {
+    try { au.pause(); } catch (e) {}
+    try { if (ytReady) { yt.pauseVideo(); } } catch (e2) {}
+    setPlayIcon(false);
+  }
+  function setPlLink(s) {
+    var a = $('plLink');
+    if (s.type === 'yt' && s.src.kind === 'list') { a.href = 'https://youtube.com/playlist?list=' + s.src.id; a.style.display = ''; }
+    else if (s.type === 'yt') { a.href = 'https://youtu.be/' + s.src.id; a.style.display = ''; }
+    else { a.style.display = 'none'; }
+  }
+  function useSource(s, save) {
+    setPlLink(s);
+    stopAll();
+    $('trackTitle').textContent = 'Loading\u2026';
+    $('trackSub').textContent = 'Audio only';
+    if (s.type === 'yt') {
+      mode = 'yt'; ytLoad(s.src);
+      if (save) { try { localStorage.setItem(STORE, JSON.stringify({ type: 'yt', src: s.src })); } catch (e) {} }
+    } else {
+      mode = 'mp3'; queue = s.list; plainFiles = !!s.files;
+      mp3Load(0, false);
+      if (save && !s.files) { try { localStorage.setItem(STORE, JSON.stringify({ type: 'urls', urls: s.list.map(function (x) { return x.url; }) })); } catch (e) {} }
+    }
+    $('seek').value = 0; fill($('seek')); $('tCur').textContent = '0:00'; $('tDur').textContent = '0:00';
+  }
+  function defaultSource() { return { type: 'yt', src: { kind: 'list', id: PLAYLIST } }; }
+  function savedSource() {
+    try {
+      var j = JSON.parse(localStorage.getItem(STORE) || 'null');
+      if (!j) { return null; }
+      if (j.type === 'yt' && j.src && j.src.id) { return j; }
+      if (j.type === 'urls' && j.urls && j.urls.length) {
+        return { type: 'mp3', list: j.urls.map(function (u) { return { url: u, name: nameFromUrl(u) }; }) };
+      }
+    } catch (e) { /* ignore */ }
+    return null;
+  }
+
+  /* --- controls --- */
+  $('playBtn').onclick = function () {
+    if (mode === 'mp3') { if (au.paused) { var p = au.play(); if (p && p.catch) { p.catch(function () {}); } } else { au.pause(); } }
+    else if (mode === 'yt' && ytReady) { if (yt.getPlayerState() === 1) { yt.pauseVideo(); } else { yt.playVideo(); } }
+  };
+  $('nextBtn').onclick = function () {
+    if (mode === 'mp3') {
+      if (shuffleOn && queue.length > 1) { var n; do { n = Math.floor(Math.random() * queue.length); } while (n === qi); mp3Load(n, !au.paused); }
+      else { mp3Load(qi + 1, !au.paused); }
+    } else if (mode === 'yt' && ytReady) { yt.nextVideo(); }
+  };
+  $('prevBtn').onclick = function () {
+    if (mode === 'mp3') { if (au.currentTime > 4) { au.currentTime = 0; } else { mp3Load(qi - 1, !au.paused); } }
+    else if (mode === 'yt' && ytReady) { if (yt.getCurrentTime() > 4) { yt.seekTo(0, true); } else { yt.previousVideo(); } }
+  };
+  $('shuffleBtn').onclick = function () {
+    shuffleOn = !shuffleOn; this.setAttribute('aria-pressed', shuffleOn);
+    if (ytReady && yt.setShuffle) { yt.setShuffle(shuffleOn); }
+  };
+  $('repeatBtn').onclick = function () {
+    loopOn = !loopOn; this.setAttribute('aria-pressed', loopOn);
+    if (ytReady && yt.setLoop) { yt.setLoop(loopOn); }
+  };
+  var seekEl = $('seek');
+  seekEl.addEventListener('input', function () { seeking = true; fill(seekEl); $('tCur').textContent = fmt(+seekEl.value); });
+  seekEl.addEventListener('change', function () {
+    if (mode === 'mp3') { au.currentTime = +seekEl.value; }
+    else if (mode === 'yt' && ytReady) { yt.seekTo(+seekEl.value, true); }
+    seeking = false;
+  });
+  var volEl = $('vol');
+  volEl.addEventListener('input', function () {
+    fill(volEl); $('volTxt').textContent = volEl.value + '%';
+    au.volume = curVol() / 100;
+    if (ytReady) { yt.setVolume(curVol()); if (muted && curVol() > 0) { muted = false; yt.unMute(); } }
+    if (muted && curVol() > 0) { muted = false; au.muted = false; $('muteBtn').style.opacity = 1; }
+  });
+  $('muteBtn').onclick = function () {
+    muted = !muted;
+    au.muted = muted;
+    if (ytReady) { if (muted) { yt.mute(); } else { yt.unMute(); } }
+    this.style.opacity = muted ? 0.5 : 1;
+  };
+  fill(seekEl); fill(volEl);
+
+  /* --- upload / change playlist dialog --- */
+  var modal = $('modal');
+  $('uploadBtn').onclick = function () { $('merr').textContent = ''; modal.classList.add('on'); $('srcText').focus(); };
+  $('mCancel').onclick = function () { modal.classList.remove('on'); };
+  modal.addEventListener('click', function (e) { if (e.target === modal) { modal.classList.remove('on'); } });
+  $('mReset').onclick = function () {
+    try { localStorage.removeItem(STORE); } catch (e) {}
+    $('srcText').value = ''; $('srcFile').value = '';
+    useSource(defaultSource(), false);
+    modal.classList.remove('on');
+  };
+  $('mLoad').onclick = function () {
+    var err = $('merr'), files = $('srcFile').files, text = $('srcText').value.trim();
+    err.textContent = '';
+    if (files && files.length) {
+      var list = [], i;
+      for (i = 0; i < files.length; i++) { list.push({ url: URL.createObjectURL(files[i]), name: files[i].name.replace(/\.[a-z0-9]{2,4}$/i, '') }); }
+      useSource({ type: 'mp3', list: list, files: true }, false);
+      modal.classList.remove('on'); return;
+    }
+    if (!text) { err.textContent = 'Paste a YouTube or MP3 link, or choose audio files.'; return; }
+    var lines = text.split(/\s+/).filter(Boolean), ytSrc = null, urls = [];
+    lines.forEach(function (l) {
+      if (/youtu\.?be/i.test(l) || /^(PL|UU|OL|FL|RD)[\w-]{10,}$/.test(l)) { if (!ytSrc) { ytSrc = parseYT(l); } }
+      else if (/^https?:\/\//i.test(l)) { urls.push({ url: l, name: nameFromUrl(l) }); }
+    });
+    if (ytSrc) { useSource({ type: 'yt', src: ytSrc }, true); modal.classList.remove('on'); return; }
+    if (urls.length) { useSource({ type: 'mp3', list: urls }, true); modal.classList.remove('on'); return; }
+    var bare = parseYT(text);
+    if (bare) { useSource({ type: 'yt', src: bare }, true); modal.classList.remove('on'); return; }
+    err.textContent = 'That does not look like a YouTube link or an MP3 link.';
+  };
+
+  try { useSource(savedSource() || defaultSource(), false); } catch (e0) { /* keep the page alive */ }
+
+  /* ---------- Interactive bookshelf (reads your Blogger posts) ---------- */
+  var CATS = ['Other'];
+  var books = [], state = { q: '', cat: 'All books' }, selected = null;
+
+  function categorize(b) { return (b.labels && b.labels[0]) || 'Other'; }
+  function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) | 0; } return Math.abs(h); }
+  function decorate(b, i) {
+    var h = hash(b.title);
+    b.cat = categorize(b);
+    b.hue = h % 360;
+    b.w = 34 + (h % 5) * 5 + Math.min(14, Math.floor(b.title.length / 6));
+    b.h = 104 + (h >> 3) % 44;
+    b.i = i;
+    return b;
+  }
+  function loadFailed() {
+    var shelf = $('shelf');
+    shelf.innerHTML = '';
+    var p = document.createElement('p'); p.className = 'empty';
+    p.textContent = 'Could not load the posts right now. ';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = 'Try again';
+    b.onclick = function () { shelf.innerHTML = '<p class="empty">Loading the library\u2026</p>'; load(); };
+    p.appendChild(b); shelf.appendChild(p);
+    $('detail').innerHTML = '';
+  }
+  function load() {
+    fetch('/posts.json')
+      .then(function (r) { if (!r.ok) { throw new Error('http ' + r.status); } return r.json(); })
+      .then(function (list) {
+        books = list.map(function (p) { return { title: p.title, link: p.url, labels: p.labels || [], img: p.image || '', text: p.summary || '' }; }).map(decorate);
+        var counts = {};
+        books.forEach(function (b) { counts[b.cat] = (counts[b.cat] || 0) + 1; });
+        CATS = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+        buildChips(); render();
+      })
+      .catch(loadFailed);
+  }
+
+  function buildChips() {
+    var box = $('chips'), counts = { 'All books': books.length };
+    books.forEach(function (b) { counts[b.cat] = (counts[b.cat] || 0) + 1; });
+    box.innerHTML = '';
+    ['All books'].concat(CATS).forEach(function (c) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip' + (state.cat === c ? ' on' : '');
+      btn.appendChild(document.createTextNode(c));
+      var n = document.createElement('i'); n.textContent = counts[c] || 0; btn.appendChild(n);
+      btn.onclick = function () { state.cat = c; buildChips(); render(); };
+      box.appendChild(btn);
+    });
+  }
+
+  function select(b) {
+    selected = b;
+    var d = $('detail');
+    d.innerHTML = '';
+    var cover = document.createElement('div'); cover.className = 'cover';
+    if (b.img) { cover.style.backgroundImage = 'url("' + b.img + '")'; }
+    else { cover.style.background = 'linear-gradient(160deg,hsl(' + b.hue + ',45%,42%),hsl(' + b.hue + ',45%,24%))'; }
+    var meta = document.createElement('div'); meta.className = 'meta';
+    var h = document.createElement('h4'); h.textContent = b.title;
+    var s = document.createElement('small'); s.textContent = b.cat;
+    var p = document.createElement('p'); p.textContent = b.text;
+    var a = document.createElement('a'); a.href = b.link; a.textContent = 'Read this book \u2192';
+    meta.appendChild(h); meta.appendChild(s); meta.appendChild(p); meta.appendChild(a);
+    d.appendChild(cover); d.appendChild(meta);
+    var all = document.querySelectorAll('.spine');
+    for (var i = 0; i < all.length; i++) { all[i].classList.toggle('sel', all[i].getAttribute('data-i') === String(b.i)); }
+  }
+
+  function render() {
+    var shelf = $('shelf'), q = state.q.toLowerCase();
+    var list = books.filter(function (b) {
+      if (state.cat !== 'All books' && b.cat !== state.cat) { return false; }
+      return !q || (b.title + ' ' + b.labels.join(' ') + ' ' + b.text).toLowerCase().indexOf(q) > -1;
+    });
+    shelf.innerHTML = '';
+    if (!list.length) {
+      var em = document.createElement('p'); em.className = 'empty';
+      em.textContent = 'No books match your search. Try another word or category.';
+      shelf.appendChild(em); $('detail').innerHTML = ''; return;
+    }
+    var width = Math.max(200, shelf.clientWidth - 20), rows = [], row = [], used = 0;
+    list.forEach(function (b) {
+      var bw = b.w + 5;
+      if (used + bw > width && row.length) { rows.push(row); row = []; used = 0; }
+      row.push(b); used += bw;
+    });
+    if (row.length) { rows.push(row); }
+    var n = 0;
+    rows.forEach(function (r) {
+      var rowEl = document.createElement('div'); rowEl.className = 'row';
+      r.forEach(function (b) {
+        var sp = document.createElement('button');
+        sp.type = 'button'; sp.className = 'spine';
+        sp.setAttribute('data-i', b.i);
+        sp.title = b.title;
+        sp.style.width = b.w + 'px'; sp.style.height = b.h + 'px';
+        sp.style.background = 'linear-gradient(180deg,hsl(' + b.hue + ',48%,44%),hsl(' + b.hue + ',50%,28%))';
+        sp.style.animationDelay = (n++ * 25) + 'ms';
+        var t = document.createElement('span'); t.textContent = b.title; sp.appendChild(t);
+        sp.onclick = function () { select(b); };
+        rowEl.appendChild(sp);
+      });
+      shelf.appendChild(rowEl);
+    });
+    var keep = selected && list.indexOf(selected) > -1 ? selected : list[0];
+    select(keep);
+  }
+
+  $('q').addEventListener('input', function () { state.q = this.value.trim(); render(); });
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(render, 150); });
+  load();
+
+  /* ---------- Background videos (left scene) ---------- */
+  var VID_BASE = window.NEXORA_VIDEO_BASE || 'videos/';
+  var FALLBACK = {
+    summer: { to: 'spring', f: 'saturate(1.3) brightness(1.1) contrast(1.04)' },
+    sunrise: { to: 'spring', f: 'sepia(.3) saturate(1.25) brightness(1.02)' }
+  };
+  var SEASONS = ['spring', 'summer', 'autumn', 'winter'];
+  var S = { base: 'day', special: null, season: 'spring', auto: false, rain: true };
+  var bgBox = $('bgvids'), vids = {}, wanted = null, pauseT = null, autoTimer = null;
+
+  function getVid(key) {
+    if (vids[key]) { return vids[key]; }
+    var v = document.createElement('video');
+    v.className = 'bgv';
+    v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true;
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
+    v.preload = 'auto';
+    v.poster = VID_BASE + key + '.jpg';
+    v.addEventListener('error', function () {
+      v.setAttribute('data-bad', '1');
+      if (wanted === key) { showScene(key); }
+    });
+    v.src = VID_BASE + key + '.mp4';
+    bgBox.appendChild(v);
+    vids[key] = v;
+    return v;
+  }
+
+  function reveal(key) {
+    var use = key, filt = '', v = getVid(key), k;
+    if (v.getAttribute('data-bad') && FALLBACK[key]) {
+      use = FALLBACK[key].to; filt = FALLBACK[key].f; v = getVid(use);
+    }
+    for (k in vids) { if (vids[k] !== v) { vids[k].classList.remove('on'); } }
+    v.style.filter = filt;
+    v.classList.add('on');
+    var pr = v.play();
+    if (pr && pr.catch) { pr.catch(function () { /* autoplay blocked: poster stays visible */ }); }
+    clearTimeout(pauseT);
+    pauseT = setTimeout(function () {
+      for (var j in vids) { if (!vids[j].classList.contains('on')) { vids[j].pause(); } }
+    }, 1600);
+  }
+
+  function showScene(key) {
+    wanted = key;
+    var v = getVid(key);
+    if (v.readyState >= 2 || v.getAttribute('data-bad')) { reveal(key); return; }
+    var done = false;
+    function go() { if (done) { return; } done = true; if (wanted === key) { reveal(key); } }
+    v.addEventListener('loadeddata', go, { once: true });
+    v.addEventListener('error', go, { once: true });
+    setTimeout(go, 2500);
+  }
+
+  function sceneKey() {
+    if (S.rain) { return 'rain'; }
+    if (S.special) { return S.special; }
+    if (S.base === 'night') { return 'night'; }
+    return S.season;
+  }
+
+  function press(node, on) { if (node) { node.setAttribute('aria-pressed', on ? 'true' : 'false'); } }
+  function applyScene() {
+    var key = sceneKey();
+    app.setAttribute('data-base', S.base);
+    press($('sunriseBtn'), key === 'sunrise');
+    press($('sunsetBtn'), key === 'sunset');
+    press($('dnBtn'), S.base === 'night');
+    press($('autoBtn'), S.auto);
+    press($('sceneRainBtn'), S.rain);
+    var sb = document.querySelectorAll('button[data-season]');
+    for (var i = 0; i < sb.length; i++) { press(sb[i], key === sb[i].getAttribute('data-season')); }
+    showScene(key);
+  }
+
+  $('sunriseBtn').onclick = function () { S.special = S.special === 'sunrise' ? null : 'sunrise'; if (S.special) { S.rain = false; } applyScene(); };
+  $('sunsetBtn').onclick = function () { S.special = S.special === 'sunset' ? null : 'sunset'; if (S.special) { S.rain = false; } applyScene(); };
+  $('dnBtn').onclick = function () { S.base = S.base === 'day' ? 'night' : 'day'; S.special = null; S.rain = false; applyScene(); };
+  $('sceneRainBtn').onclick = function () { S.rain = !S.rain; applyScene(); };
+  var seasonBtns = document.querySelectorAll('button[data-season]');
+  for (var si = 0; si < seasonBtns.length; si++) {
+    seasonBtns[si].onclick = function () {
+      S.season = this.getAttribute('data-season');
+      S.special = null; S.base = 'day'; S.rain = false;
+      applyScene();
+    };
+  }
+  $('autoBtn').onclick = function () {
+    S.auto = !S.auto;
+    clearInterval(autoTimer);
+    if (S.auto) {
+      S.special = null; S.base = 'day'; S.rain = false;
+      autoTimer = setInterval(function () {
+        S.season = SEASONS[(SEASONS.indexOf(S.season) + 1) % SEASONS.length];
+        S.special = null; S.base = 'day'; S.rain = false;
+        applyScene();
+      }, 9000);
+    }
+    applyScene();
+  };
+
+  /* ---------- Puppy: animated run cycle, plays with ball, goes home to the house on the pillow ---------- */
+  var pet = $('pet'), dog = $('dog'), dogBubble = $('dogBubble'), zzz = $('zzz'),
+      ball = $('ball'), bspin = $('bspin'), house = $('dogHouse'), dogBtn = $('dogBtn');
+  var DOG_W = 72, BALL_D = 30, DOG_SPEED = 210, CHASE_SPEED = 270, BALL_SPEED = 330;
+  var dogT = null, napT = null, bubT = null, dogOn = false, ballRot = 0;
+  var Mat = window.DOMMatrix || window.WebKitCSSMatrix;
+
+  function tx(node) {
+    var t = getComputedStyle(node).transform;
+    return (!t || t === 'none' || !Mat) ? 0 : new Mat(t).m41;
+  }
+  function place(node, x) {
+    node.style.transition = 'none';
+    node.style.transform = 'translate3d(' + x + 'px,0,0)';
+    void node.offsetWidth;
+  }
+  function doorX() {
+    var hr = house.getBoundingClientRect(), pr = pet.getBoundingClientRect();
+    return hr.left - pr.left + hr.width / 2 - DOG_W / 2;
+  }
+  function dogBounds() { return { min: 6, max: Math.max(doorX() - 90, 140) }; }
+  function ballBounds() { return { min: 50, max: Math.max(doorX() - 80, 200) }; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
+
+  function say(text, ms) {
+    dogBubble.textContent = text;
+    dogBubble.classList.add('on');
+    clearTimeout(bubT);
+    bubT = setTimeout(function () { dogBubble.classList.remove('on'); }, ms || 1100);
+  }
+
+  function goTo(x, done, speed) {
+    var from = tx(dog), dist = Math.abs(x - from), dir = x >= from ? 1 : -1;
+    dog.style.setProperty('--d', dir);
+    $('dogFlip').style.setProperty('--d', dir);
+    clearTimeout(dogT);
+    if (dist < 3) { if (done) { done(); } return; }
+    var dur = dist / (speed || DOG_SPEED);
+    dog.classList.remove('sit');
+    dog.classList.add('run');
+    dog.style.transition = 'transform ' + dur.toFixed(2) + 's linear';
+    dog.style.transform = 'translate3d(' + x + 'px,0,0)';
+    dogT = setTimeout(function () { dog.classList.remove('run'); if (done) { done(); } }, dur * 1000 + 40);
+  }
+
+  function rollBall(x, dir) {
+    var from = tx(ball), dist = Math.abs(x - from), dur = Math.max(0.4, dist / BALL_SPEED);
+    var ease = 'cubic-bezier(.2,.7,.3,1)';
+    ballRot += dir * (dist / (BALL_D / 2)) * 57.3;
+    ball.classList.add('roll');
+    ball.style.transition = 'transform ' + dur.toFixed(2) + 's ' + ease;
+    ball.style.transform = 'translate3d(' + x + 'px,0,0)';
+    bspin.style.transition = 'transform ' + dur.toFixed(2) + 's ' + ease;
+    bspin.style.transform = 'rotate(' + ballRot.toFixed(0) + 'deg)';
+    setTimeout(function () { ball.classList.remove('roll'); }, dur * 1000);
+    return dur;
+  }
+
+  function behindBall(bx, dir) {
+    var b = dogBounds(), center = bx + BALL_D / 2;
+    return clamp(center - dir * (DOG_W / 2 + BALL_D / 2 - 6) - DOG_W / 2, b.min, b.max);
+  }
+
+  function playRound() {
+    if (!dogOn) { return; }
+    var rng = ballBounds(), bx = tx(ball), dest = bx, tries = 0;
+    do { dest = rng.min + Math.random() * (rng.max - rng.min); tries++; } while (Math.abs(dest - bx) < 150 && tries < 14);
+    var dir = dest >= bx ? 1 : -1;
+    goTo(behindBall(bx, dir), function () {
+      if (!dogOn) { return; }
+      $('dogFlip').style.setProperty('--d', dir);
+      dog.classList.add('kick');
+      setTimeout(function () { dog.classList.remove('kick'); }, 300);
+      rollBall(dest, dir);
+      if (Math.random() < 0.55) { say(pick(['Woof!', 'Yip!', 'Woof woof!']), 900); }
+      dogT = setTimeout(function () {
+        if (!dogOn) { return; }
+        goTo(behindBall(dest, dir), function () {
+          if (!dogOn) { return; }
+          dog.classList.add('sit');
+          dogT = setTimeout(playRound, 700 + Math.random() * 900);
+        }, CHASE_SPEED);
+      }, 200);
+    });
+  }
+
+  function dogWake() {
+    clearTimeout(dogT); clearTimeout(napT);
+    dogOn = true;
+    zzz.classList.remove('on');
+    if (dog.classList.contains('hide')) { place(dog, doorX()); }
+    dog.classList.remove('hide');
+    say('Woof!', 900);
+    dogT = setTimeout(playRound, 550);
+    napT = setTimeout(function () { if (dogOn) { press(dogBtn, false); dogHome(); } }, 50000);
+  }
+
+  function dogHome() {
+    dogOn = false;
+    clearTimeout(napT); clearTimeout(dogT);
+    dog.classList.remove('sit', 'kick');
+    if (dog.classList.contains('hide')) { zzz.classList.add('on'); return; }
+    say('Home time!', 1000);
+    goTo(doorX(), function () {
+      dog.classList.add('hide');
+      dogT = setTimeout(function () { zzz.classList.add('on'); }, 450);
+    }, 250);
+  }
+
+  dogBtn.onclick = function () {
+    var on = this.getAttribute('aria-pressed') !== 'true';
+    press(this, on);
+    this.title = on ? 'Send the puppy home to his dog house' : 'Let the puppy out to play with his ball';
+    if (on) { dogWake(); } else { dogHome(); }
+  };
+  dog.onclick = function () {
+    if (!dog.classList.contains('hide')) { say(pick(['Woof woof!', 'Yip yip!', 'Hi there!']), 1200); }
+  };
+
+  function petReflow() {
+    if (!pet.clientWidth) { return; }
+    var rng = ballBounds();
+    place(ball, clamp(tx(ball), rng.min, rng.max));
+    if (dog.classList.contains('hide')) { place(dog, doorX()); }
+  }
+  if (window.ResizeObserver) { new ResizeObserver(petReflow).observe(pet); }
+  window.addEventListener('resize', petReflow);
+  (function () {
+    var rng = ballBounds();
+    place(ball, rng.min + (rng.max - rng.min) * 0.4);
+    place(dog, doorX());
+    zzz.classList.add('on');
+  })();
+
+  applyScene();
+  setTimeout(function () { ['spring', 'sunset', 'night', 'autumn', 'winter'].forEach(getVid); }, 4000);
+})();
+
+</script>
+</body>
+</html>

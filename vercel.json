@@ -1,0 +1,20 @@
+{
+  "buildCommand": "node build.mjs",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/:year(\\d{4})/:month(\\d{2})/:slug.html", "destination": "/posts/:slug/", "permanent": true },
+    { "source": "/p/:slug.html", "destination": "/:slug/", "permanent": true },
+    { "source": "/search/label/:label", "destination": "/posts/?label=:label", "permanent": true },
+    { "source": "/feeds/posts/default", "destination": "/feed.xml", "permanent": true },
+    { "source": "/atom.xml", "destination": "/feed.xml", "permanent": true },
+    { "source": "/rss.xml", "destination": "/feed.xml", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/img/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
+}

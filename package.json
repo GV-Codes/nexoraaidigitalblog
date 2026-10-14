@@ -1,0 +1,12 @@
+{
+  "name": "nexora-ai-digital",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Nexora AI Digital blog, migrated from Blogger to a static site on Vercel",
+  "scripts": {
+    "export": "node export.mjs",
+    "build": "node build.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
