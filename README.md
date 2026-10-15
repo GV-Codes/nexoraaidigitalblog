@@ -3,7 +3,7 @@
 Static blog (no framework, no npm packages). Your cozy reading-room home page is `src/index.html`; every
 Blogger post becomes its own page at `/posts/<slug>/`, with an RSS feed, sitemap and SEO tags.
 
-## 1. Export your posts (once, on your computer; Node 18+)
+## 1. (Optional) Import your old Blogger posts (once, on your computer; Node 18+)
 
     node export.mjs
 
@@ -32,14 +32,22 @@ Option B, CLI:
 - Old Blogger links such as `/2026/08/my-post.html` redirect automatically to `/posts/my-post/` once your custom domain points at Vercel (see `vercel.json`).
 - A `*.blogspot.com` address can't be redirected to Vercel by Blogger. Keep the Blogger blog online for a while, or add a short redirect script to its theme.
 
-## Adding new posts later
+## Writing new posts
 
-Create `content/posts/my-post.json`:
+Add a Markdown file in `content/posts/`, for example `content/posts/my-post.md`:
 
-    { "title": "My post", "slug": "my-post", "published": "2026-10-20T09:00:00Z",
-      "labels": ["Artificial Intelligence"], "image": "", "summary": "One-line summary", "html": "<p>Body here</p>" }
+    ---
+    title: My post title
+    date: 2026-10-20
+    labels: Artificial Intelligence, Prompt Engineering
+    summary: One-line summary shown on the bookshelf and in search results.
+    image: /img/optional-cover.jpg
+    ---
 
-then commit and push. Vercel rebuilds automatically.
+    Your text here. Use ## headings, **bold**, lists, tables, `code`, [links](https://example.com) and ![images](/img/pic.jpg).
+
+The file name becomes the address (`/posts/my-post/`). The first label becomes the bookshelf category.
+Commit and push, and Vercel rebuilds automatically. Put images in `content/images/` and refer to them as `/img/<file>`.
 
 ## Files
 

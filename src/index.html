@@ -94,7 +94,6 @@ svg{display:block}
 
 /* ===== puppy shelf, house on a pillow, ball ===== */
 .pet{position:absolute;left:0;right:0;bottom:var(--pet-bottom);height:130px;z-index:2;pointer-events:none}
-.shelfline{position:absolute;left:10px;right:10px;bottom:-7px;height:8px;border-radius:3px;background:linear-gradient(180deg,#8a5a36,#5c3a20);box-shadow:0 6px 10px rgba(0,0,0,.45)}
 .pillow{position:absolute;right:0;bottom:-2px;width:150px;height:30px;filter:drop-shadow(0 4px 5px rgba(0,0,0,.5))}
 .dhouse{position:absolute;right:12px;bottom:18px;width:124px;height:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
 .zzz{position:absolute;right:56px;bottom:122px;display:flex;gap:3px;align-items:flex-end;opacity:0;transition:opacity .5s;font:600 14px 'Fraunces',Georgia,serif;color:#cfe0ff;text-shadow:0 1px 6px rgba(0,0,0,.8)}
@@ -241,6 +240,37 @@ input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;bac
 }
 @media (prefers-reduced-motion:reduce){.bgv{transition:none}}
 
+
+/* ===== desktop: video fills the workspace up to the bookshelf panel; player sits on the in-room shelf ===== */
+@media (min-width:901px){
+  .stage{display:block;position:relative;isolation:isolate;overflow:hidden}
+  .room{position:absolute;top:0;bottom:0;left:14px;
+    right:calc(clamp(320px,29%,400px) + 28px);   /* video ends where the Interactive Bookshelf begins */
+    z-index:0;transition:right .5s ease}
+  .app.focus .room{right:14px}
+  .bgv{object-fit:cover;object-position:0% 50%}
+  .room[data-fit="fit"] .bgv{object-fit:contain;object-position:50% 50%}
+  .music{position:absolute;top:0;left:0;z-index:6;transform-origin:0 0;
+    width:220px;overflow:visible;padding:8px;gap:6px;border-radius:15px;
+    color:#261d2e;background:rgba(255,255,255,.96);border:1px solid rgba(255,255,255,.98);
+    box-shadow:0 12px 32px rgba(0,0,0,.32),0 0 0 2px rgba(255,255,255,.2)}
+  .music .eyebrow{font-size:7.5px;letter-spacing:.105em;line-height:1.3;color:#986024}
+  .music .link{font-size:9px;color:#91551b}
+  .music .track h3{font-size:11px;line-height:1.25}
+  .music .track p{font-size:9px;line-height:1.3;color:#756a7d}
+  .music .controls{padding:6px 5px;gap:4px;border-radius:11px;background:#fffaf2;border:1px solid rgba(188,133,66,.42)}
+  .music .seekrow,.music .volrow{gap:3px;font-size:9px;color:#756a7d}
+  .music .ib{width:24px;height:24px;color:#3d3147}
+  .music .ib:hover{background:rgba(45,29,58,.08)}
+  .music .ib svg{width:13px;height:13px}
+  .music .ib.play{width:34px;height:34px;color:#2a1a0c}
+  .music .ib.play svg{width:16px;height:16px}
+  .music .ib.sm{width:21px;height:21px}
+  .music input[type=range]{background:linear-gradient(90deg,#bd8138 var(--p,0%),#ded7e3 var(--p,0%))}
+  .music .upl{font-size:10px;line-height:1.25;padding:7px 6px;white-space:normal}
+  .hero{left:clamp(260px,24vw,330px);max-width:calc(100% - 300px)}
+  .books{position:absolute;top:14px;right:14px;bottom:14px;width:clamp(320px,29%,400px);z-index:4}
+}
 </style>
 </head>
 <body>
@@ -335,7 +365,7 @@ input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;bac
     </aside>
 
     <!-- CENTER: scene -->
-    <section class="room" id="room" data-fit="fit">
+    <section class="room" id="room" data-fit="fill">
       <div class="bg" id="bg" aria-hidden="true"><div id="bgvids"></div><i class="scrim"></i><i class="vig"></i></div>
 
       <div class="hero">
@@ -345,7 +375,7 @@ input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;bac
       </div>
 
       <div class="relax" id="relax">
-        <button type="button" class="rb" id="fitBtn" aria-label="Toggle full view or fill" title="Full view / Fill the frame"><span>View <b id="fitState">Full</b></span></button>
+        <button type="button" class="rb" id="fitBtn" aria-label="Toggle full view or fill" title="Full view / Fill the frame"><span>View <b id="fitState">Fill</b></span></button>
         <button type="button" class="rb" id="rainBtn" aria-label="Toggle rain ambience" aria-pressed="false">
           <svg viewBox="0 0 24 24"><path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9M8 19v2M8 13v2M16 19v2M16 13v2M12 21v2M12 15v2"/></svg>
           <span>Rain <b class="rain-state">Off</b></span>
@@ -357,7 +387,6 @@ input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;bac
       </div>
 
       <div class="pet" id="pet">
-        <i class="shelfline"></i>
 
         <svg class="pillow" viewBox="0 0 150 30" aria-hidden="true">
           <defs><linearGradient id="plw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b86e6"/><stop offset="1" stop-color="#2c4fa8"/></linearGradient></defs>
@@ -399,7 +428,7 @@ input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;bac
           <div class="bubble" id="dogBubble">Woof!</div>
           <i class="dshadow"></i>
           <div class="pop" id="dogPop"><div class="flip" id="dogFlip">
-            <img class="dogimg" id="dogImg" alt="Golden puppy with a blue paw-print bandana" width="72" height="101" draggable="false" src="/assets/dog.webp"/>
+            <img class="dogimg" id="dogImg" alt="Golden puppy with a blue paw-print bandana" width="72" height="101" draggable="false" src="https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@main/dog.webp" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='/assets/dog.webp';}"/>
           </div></div>
         </div>
       </div>
@@ -587,6 +616,7 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
   /* --- YouTube engine (hidden player, we only use its sound) --- */
   function ytCreate(src) {
     var pv = { controls: 0, rel: 0, playsinline: 1, fs: 0, disablekb: 1, iv_load_policy: 3 };
+    if (/^https?:/.test(location.protocol)) { pv.origin = location.origin; }
     if (src.kind === 'list') { pv.listType = 'playlist'; pv.list = src.id; }
     yt = new YT.Player('ytplayer', {
       width: '220', height: '220',
@@ -626,7 +656,9 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
     window.onYouTubeIframeAPIReady = function () { var q = ytQueue; ytQueue = []; q.forEach(function (f) { f(); }); };
     var s = document.createElement('script');
     s.src = 'https://www.youtube.com/iframe_api';
+    s.onerror = function () { $('trackTitle').textContent = 'Could not reach YouTube'; $('trackSub').textContent = 'Check your connection or upload MP3 files'; };
     document.head.appendChild(s);
+    setTimeout(function () { if (!ytReady && mode === 'yt' && $('trackTitle').textContent === 'Loading\u2026') { $('trackTitle').textContent = 'Rainy-day playlist'; $('trackSub').textContent = 'Audio only \u00b7 Press play'; } }, 9000);
   }
 
   /* --- MP3 engine --- */
@@ -662,10 +694,10 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
         $('trackSub').textContent = 'Audio only \u00b7 Track ' + (qi + 1) + ' of ' + queue.length + (plainFiles ? ' \u00b7 your files' : ' \u00b7 your MP3 links');
       } else if (mode === 'yt' && ytReady) {
         var vd = yt.getVideoData ? yt.getVideoData() : null;
-        if (vd && vd.title) { $('trackTitle').textContent = vd.title; }
+        $('trackTitle').textContent = (vd && vd.title) ? vd.title : 'Rainy-day playlist';
         var list = yt.getPlaylist ? yt.getPlaylist() : null;
         var idx = yt.getPlaylistIndex ? yt.getPlaylistIndex() : -1;
-        var sub = 'Audio only';
+        var sub = (vd && vd.title) ? 'Audio only' : 'Audio only \u00b7 Press play';
         if (list && list.length && idx >= 0) { sub += ' \u00b7 Track ' + (idx + 1) + ' of ' + list.length; }
         if (vd && vd.author) { sub += ' \u00b7 ' + vd.author; }
         $('trackSub').textContent = sub;
@@ -1162,6 +1194,38 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
 
   applyScene();
   setTimeout(function () { ['spring', 'sunset', 'night', 'autumn', 'winter'].forEach(getVid); }, 4000);
+
+  /* ---------- Put the audio player exactly on the bookshelf that is IN the video ---------- */
+  /* Shelf position inside the video frame, as fractions of its width/height. */
+  var SHELF = { x0: 0.018, x1: 0.200, y0: 0.075, y1: 0.525 };
+  var VIDEO_AR = 16 / 9;
+  function placePlayer() {
+    var mus = $('musicPanel'), room = $('room'), stage = document.querySelector('.stage');
+    if (!mus || !room || !stage) { return; }
+    if (window.innerWidth <= 900) { mus.style.left = mus.style.top = mus.style.transform = ''; return; }
+    var r = room.getBoundingClientRect(), st = stage.getBoundingClientRect();
+    var W = r.width, H = r.height, cover = room.getAttribute('data-fit') !== 'fit';
+    var w, h, ox, oy;
+    var k = cover ? Math.max(W / VIDEO_AR, H) : Math.min(W / VIDEO_AR, H);   /* displayed video height */
+    h = k; w = k * VIDEO_AR;
+    ox = cover ? 0 : (W - w) / 2;          /* cover is anchored to the left edge */
+    oy = (H - h) / 2;
+    var bx = ox + w * SHELF.x0, by = oy + h * SHELF.y0, bw = w * (SHELF.x1 - SHELF.x0), bh = h * (SHELF.y1 - SHELF.y0);
+    mus.style.transform = 'none';
+    var pw = mus.offsetWidth, ph = mus.offsetHeight;
+    var scale = Math.min((bw * 0.94) / pw, (bh * 0.94) / ph, 1);
+    var left = (r.left - st.left) + bx + (bw - pw * scale) / 2;
+    var top = (r.top - st.top) + by + (bh - ph * scale) / 2;
+    mus.style.left = Math.round(left) + 'px';
+    mus.style.top = Math.round(top) + 'px';
+    mus.style.transform = 'scale(' + scale.toFixed(3) + ')';
+  }
+  window.addEventListener('resize', placePlayer);
+  window.addEventListener('load', placePlayer);
+  setTimeout(placePlayer, 300); setTimeout(placePlayer, 1200);
+  var _fit = $('fitBtn'); if (_fit) { _fit.addEventListener('click', function () { setTimeout(placePlayer, 30); }); }
+  var _foc = $('focusBtn'); if (_foc) { _foc.addEventListener('click', function () { setTimeout(placePlayer, 560); }); }
+  var _tx = $('trackTitle'); if (_tx && window.MutationObserver) { new MutationObserver(placePlayer).observe(_tx, { childList: true, characterData: true, subtree: true }); }
 })();
 
 </script>

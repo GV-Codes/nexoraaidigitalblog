@@ -2,6 +2,7 @@
 // Zero dependencies. Vercel runs this automatically (see vercel.json).
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const SRC = path.join(ROOT, 'src');
@@ -18,10 +19,102 @@ const SITE_URL = (
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const fmtDate = (iso) => (iso ? new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) : '');
 
+// ---------- tiny Markdown -> HTML (headings, lists, tables, quotes, code, links, images) ----------
+function inlineMd(src) {
+  const codes = [];
+  let t = src.replace(/`([^`]+)`/g, (m, c) => { codes.push(c); return `\u0000${codes.length - 1}\u0000`; });
+  t = esc(t);
+  t = t.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, '<img src="$2" alt="$1" loading="lazy"/>');
+  t = t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
+  t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>');
+  return t.replace(/\u0000(\d+)\u0000/g, (m, i) => `<code>${esc(codes[i])}</code>`);
+}
+function md(src) {
+  const lines = src.replace(/\r/g, '').split('\n');
+  const out = [];
+  const startsBlock = (l) => /^(#{1,4}\s|>|```|\s*[-*]\s+|\s*\d+[.)]\s+|-{3,}$)/.test(l);
+  let i = 0;
+  while (i < lines.length) {
+    const l = lines[i];
+    let m;
+    if (/^```/.test(l)) {
+      const code = [];
+      i++;
+      while (i < lines.length && !/^```/.test(lines[i])) code.push(lines[i++]);
+      i++;
+      out.push(`<pre><code>${esc(code.join('\n'))}</code></pre>`);
+    } else if (!l.trim()) {
+      i++;
+    } else if ((m = /^(#{1,4})\s+(.*)$/.exec(l))) {
+      out.push(`<h${m[1].length}>${inlineMd(m[2])}</h${m[1].length}>`);
+      i++;
+    } else if (/^(-{3,}|\*{3,})\s*$/.test(l)) {
+      out.push('<hr />');
+      i++;
+    } else if (/^>/.test(l)) {
+      const q = [];
+      while (i < lines.length && /^>/.test(lines[i])) q.push(lines[i++].replace(/^>\s?/, ''));
+      out.push(`<blockquote>${md(q.join('\n'))}</blockquote>`);
+    } else if (/^\s*[-*]\s+/.test(l) || /^\s*\d+[.)]\s+/.test(l)) {
+      const ordered = /^\s*\d+[.)]\s+/.test(l);
+      const re = ordered ? /^\s*\d+[.)]\s+/ : /^\s*[-*]\s+/;
+      const items = [];
+      while (i < lines.length && re.test(lines[i])) items.push(`<li>${inlineMd(lines[i++].replace(re, ''))}</li>`);
+      out.push(`<${ordered ? 'ol' : 'ul'}>${items.join('')}</${ordered ? 'ol' : 'ul'}>`);
+    } else if (l.includes('|') && i + 1 < lines.length && /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/.test(lines[i + 1])) {
+      const cells = (row) => row.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim());
+      const head = cells(l);
+      i += 2;
+      const rows = [];
+      while (i < lines.length && lines[i].includes('|') && lines[i].trim()) rows.push(cells(lines[i++]));
+      out.push(
+        `<table><thead><tr>${head.map((c) => `<th>${inlineMd(c)}</th>`).join('')}</tr></thead><tbody>${rows
+          .map((r) => `<tr>${r.map((c) => `<td>${inlineMd(c)}</td>`).join('')}</tr>`)
+          .join('')}</tbody></table>`,
+      );
+    } else {
+      const para = [];
+      while (i < lines.length && lines[i].trim() && !startsBlock(lines[i])) para.push(lines[i++]);
+      if (!para.length) para.push(lines[i++]);
+      out.push(`<p>${inlineMd(para.join(' '))}</p>`);
+    }
+  }
+  return out.join('\n');
+}
+function plainText(html, max = 160) {
+  const t = html.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
+  return t.length > max ? t.slice(0, max - 1).trimEnd() + '…' : t;
+}
+function fromMarkdownFile(name, raw) {
+  const fm = /^---\n([\s\S]*?)\n---\n?/.exec(raw.replace(/\r/g, ''));
+  const meta = {};
+  if (fm) for (const line of fm[1].split('\n')) { const k = /^([\w-]+):\s*(.*)$/.exec(line); if (k) meta[k[1]] = k[2].trim().replace(/^["']|["']$/g, ''); }
+  const body = fm ? raw.replace(/\r/g, '').slice(fm[0].length) : raw;
+  const html = md(body);
+  const date = meta.date ? new Date(meta.date).toISOString() : new Date().toISOString();
+  return {
+    title: meta.title || name,
+    slug: meta.slug || name,
+    oldPath: '',
+    published: date,
+    updated: date,
+    labels: (meta.labels || '').split(',').map((s) => s.trim()).filter(Boolean),
+    image: meta.image || '',
+    summary: meta.summary || plainText(html),
+    html,
+  };
+}
+
 async function readJsonDir(dir) {
   let names = [];
-  try { names = (await fs.readdir(dir)).filter((n) => n.endsWith('.json')); } catch { return []; }
-  return Promise.all(names.map(async (n) => JSON.parse(await fs.readFile(path.join(dir, n), 'utf8'))));
+  try { names = await fs.readdir(dir); } catch { return []; }
+  const items = [];
+  for (const n of names) {
+    const file = path.join(dir, n);
+    if (n.endsWith('.json')) items.push(JSON.parse(await fs.readFile(file, 'utf8')));
+    else if (n.endsWith('.md')) items.push(fromMarkdownFile(n.replace(/\.md$/, ''), await fs.readFile(file, 'utf8')));
+  }
+  return items;
 }
 async function write(rel, data) {
   const file = path.join(PUB, rel);
@@ -232,12 +325,24 @@ ${urls.map((u) => `  <url><loc>${SITE_URL}${u.loc}</loc>${u.lastmod ? `<lastmod>
 }
 
 async function main() {
-  const posts = (await readJsonDir(path.join(CONTENT, 'posts'))).sort((a, b) => (b.published || '').localeCompare(a.published || ''));
-  const pages = await readJsonDir(path.join(CONTENT, 'pages'));
+  const loadPosts = async () =>
+    (await readJsonDir(path.join(CONTENT, 'posts'))).sort((a, b) => (b.published || '').localeCompare(a.published || ''));
+  let posts = await loadPosts();
   if (!posts.length) {
-    console.error('No posts in ./content/posts. Run "node export.mjs" first.');
+    // Nothing committed yet: pull the posts straight from Blogger during this build.
+    console.log('No posts in ./content/posts - exporting them from Blogger first...');
+    try {
+      execFileSync(process.execPath, [path.join(ROOT, 'export.mjs')], { stdio: 'inherit' });
+    } catch {
+      /* export.mjs already printed the reason */
+    }
+    posts = await loadPosts();
+  }
+  if (!posts.length) {
+    console.error('No posts found. Run "node export.mjs" locally and commit the ./content folder.');
     process.exit(1);
   }
+  const pages = await readJsonDir(path.join(CONTENT, 'pages'));
 
   await fs.rm(PUB, { recursive: true, force: true });
   await fs.cp(SRC, PUB, { recursive: true });
