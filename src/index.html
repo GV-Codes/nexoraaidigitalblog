@@ -158,6 +158,9 @@ input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:0;hei
   background:linear-gradient(90deg,var(--amber) var(--p,0%),rgba(255,255,255,.16) var(--p,0%))}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#fff3de;border:2px solid var(--amber2)}
 input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:#fff3de;border:2px solid var(--amber2)}
+.ytbox.show{opacity:1;pointer-events:auto;z-index:60;left:14px;bottom:44px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.25)}
+.ytbox iframe{width:100%;height:100%;border:0;display:block}
+.ytshow{font-size:10px;color:#91551b;text-decoration:underline;text-align:center;padding:0;margin-top:-2px;background:none}
 .ytbox{position:fixed;left:0;bottom:0;width:220px;height:220px;opacity:.01;pointer-events:none;z-index:-1;overflow:hidden}
 
 /* modal */
@@ -361,6 +364,7 @@ input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;bac
         </div>
       </div>
       <button type="button" class="upl" id="uploadBtn">&#9835; Upload your playlist</button>
+      <button type="button" class="ytshow" id="ytShowBtn" aria-pressed="false">Show YouTube player</button>
     </aside>
 
     <!-- CENTER: scene -->
@@ -1228,16 +1232,11 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
     if (!mus || !room || !stage) { return; }
     if (window.innerWidth <= 900) { mus.style.left = mus.style.top = mus.style.transform = mus.style.height = ''; ['--vx','--vy','--vw','--vh'].forEach(function (v) { room.style.removeProperty(v); }); return; }
     var r = room.getBoundingClientRect(), st = stage.getBoundingClientRect();
-    var W = r.width, H = r.height, cover = room.getAttribute('data-fit') !== 'fit';
-    var k = cover ? Math.max(W / VIDEO_AR, H) : Math.min(W / VIDEO_AR, H);   /* base video height */
-    var w = k * VIDEO_AR, h = k, fx, fy;
-    if (cover) {
-      /* zoom in until the shelf is big enough for a readable player, keeping it near the top-left */
-      var z = Math.min(1.8, Math.max(1, 210 / (w * (SHELF.x1 - SHELF.x0))));
-      w *= z; h *= z;
-      fx = 0;
-      fy = Math.min(0, Math.max(H - h, H * 0.5 - h * (SHELF.y0 + SHELF.y1) / 2));
-    } else { fx = (W - w) / 2; fy = (H - h) / 2; }
+    var W = r.width, H = r.height;
+    var kc = Math.max(W / VIDEO_AR, H);                       /* cover height */
+    var crop = 1 - W / (kc * VIDEO_AR);                        /* share of the width that cover would cut off */
+    var k = (crop <= 0.15) ? kc : W / VIDEO_AR;                /* fill the area; if that would cut too much, show the whole frame */
+    var w = k * VIDEO_AR, h = k, fx = 0, fy = (H - h) / 2;
     room.style.setProperty('--vx', fx.toFixed(1) + 'px'); room.style.setProperty('--vy', fy.toFixed(1) + 'px');
     room.style.setProperty('--vw', w.toFixed(1) + 'px'); room.style.setProperty('--vh', h.toFixed(1) + 'px');
     var bx = fx + w * SHELF.x0, by = fy + h * SHELF.y0, bw = w * (SHELF.x1 - SHELF.x0), bh = h * (SHELF.y1 - SHELF.y0);
@@ -1257,6 +1256,14 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
   setTimeout(placePlayer, 300); setTimeout(placePlayer, 1200);
   var _foc = $('focusBtn'); if (_foc) { _foc.addEventListener('click', function () { setTimeout(placePlayer, 560); }); }
   var _tx = $('trackTitle'); if (_tx && window.MutationObserver) { new MutationObserver(placePlayer).observe(_tx, { childList: true, characterData: true, subtree: true }); }
+
+  var _ysb = $('ytShowBtn');
+  if (_ysb) { _ysb.onclick = function () {
+    var box = document.querySelector('.ytbox'), on = !box.classList.contains('show');
+    box.classList.toggle('show', on); box.removeAttribute('aria-hidden');
+    _ysb.setAttribute('aria-pressed', on ? 'true' : 'false');
+    _ysb.textContent = on ? 'Hide YouTube player' : 'Show YouTube player';
+  }; }
 })();
 
 </script>
