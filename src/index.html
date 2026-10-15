@@ -374,7 +374,6 @@ input[type=range]::-moz-range-thumb{width:11px;height:11px;border-radius:50%;bac
       </div>
 
       <div class="relax" id="relax">
-        <button type="button" class="rb" id="fitBtn" aria-label="Toggle full view or fill" title="Full view / Fill the frame"><span>View <b id="fitState">Fill</b></span></button>
         <button type="button" class="rb" id="rainBtn" aria-label="Toggle rain ambience" aria-pressed="false">
           <svg viewBox="0 0 24 24"><path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9M8 19v2M8 13v2M16 19v2M16 13v2M12 21v2M12 15v2"/></svg>
           <span>Rain <b class="rain-state">Off</b></span>
@@ -545,11 +544,6 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
   });
 
   /* ---------- Full view / Fill toggle for the scene video ---------- */
-  $('fitBtn').onclick = function () {
-    var room = $('room'), fill = room.getAttribute('data-fit') !== 'fill';
-    room.setAttribute('data-fit', fill ? 'fill' : 'fit');
-    $('fitState').textContent = fill ? 'Fill' : 'Full';
-  };
 
   /* ---------- Mobile tabs ---------- */
   var tabBtns = document.querySelectorAll('.tabs button');
@@ -573,7 +567,7 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
 
   /* ---------- Audio-only music player: YouTube (hidden) or MP3 files/links ---------- */
   var mode = null;                      // 'yt' | 'mp3'
-  var yt = null, ytReady = false, ytQueue = [], ytApiLoading = false, pendingPlay = false, ytErrs = 0;
+  var yt = null, ytReady = false, ytQueue = [], ytApiLoading = false, pendingPlay = false, ytErrs = 0, startWd = null;
   var au = document.createElement('audio'); au.preload = 'auto';
   var queue = [], qi = 0, shuffleOn = false, loopOn = false, muted = false, seeking = false, plainFiles = false;
   var STORE = 'nexoraPlaylistV2';
@@ -633,9 +627,14 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
         onStateChange: function (e) {
           if (mode !== 'yt') { return; }
           setPlayIcon(e.data === 1);
-          if (e.data === 1) { ytErrs = 0; }
+          if (e.data === 1) { ytErrs = 0; clearTimeout(startWd); }
+          if (e.data === 3) { $('trackSub').textContent = 'Buffering\u2026'; }
+          if (e.data === 2) { $('trackSub').textContent = 'Paused'; }
           if (e.data === 1 || e.data === 5 || e.data === 3) { updateMeta(); }
           if (e.data === 0 && loopOn && src.kind === 'video') { yt.playVideo(); }
+        },
+        onAutoplayBlocked: function () {
+          $('trackSub').textContent = 'Your browser blocked autoplay \u00b7 press play again';
         },
         onError: function (e) {
           var c = e && e.data;
@@ -776,7 +775,18 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
   /* --- controls --- */
   $('playBtn').onclick = function () {
     if (mode === 'mp3') { if (au.paused) { var p = au.play(); if (p && p.catch) { p.catch(function () {}); } } else { au.pause(); } }
-    else if (mode === 'yt' && ytReady) { if (yt.getPlayerState() === 1) { yt.pauseVideo(); } else { yt.playVideo(); } }
+    else if (mode === 'yt' && ytReady) {
+      if (yt.getPlayerState() === 1) { yt.pauseVideo(); }
+      else {
+        yt.playVideo();
+        $('trackSub').textContent = 'Starting\u2026';
+        clearTimeout(startWd);
+        startWd = setTimeout(function () {
+          var st = -2; try { st = yt.getPlayerState(); } catch (x) {}
+          if (st !== 1 && st !== 3) { $('trackSub').textContent = 'YouTube did not start (state ' + st + ') \u00b7 press play again or open \u201cPlaylist\u201d'; }
+        }, 4000);
+      }
+    }
     else if (mode === 'yt') { pendingPlay = true; $('trackSub').textContent = 'Starting\u2026'; }
   };
   $('nextBtn').onclick = function () {
@@ -1245,7 +1255,6 @@ window.NEXORA_VIDEO_BASE = 'https://cdn.jsdelivr.net/gh/GV-Codes/nexora-videos@m
   window.addEventListener('resize', placePlayer);
   window.addEventListener('load', placePlayer);
   setTimeout(placePlayer, 300); setTimeout(placePlayer, 1200);
-  var _fit = $('fitBtn'); if (_fit) { _fit.addEventListener('click', function () { setTimeout(placePlayer, 30); }); }
   var _foc = $('focusBtn'); if (_foc) { _foc.addEventListener('click', function () { setTimeout(placePlayer, 560); }); }
   var _tx = $('trackTitle'); if (_tx && window.MutationObserver) { new MutationObserver(placePlayer).observe(_tx, { childList: true, characterData: true, subtree: true }); }
 })();
